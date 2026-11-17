@@ -1,10 +1,12 @@
-<div id="mqsPanel" class="drawer-content" style="display: none;">
-    <div class="panelControlBar flex-container alignItemsBaseline">
-        <div id="mqsPanelheader" class="fa-fw fa-solid fa-grip drag-grabber hoverglow" title="Drag to move"></div>
-        <div class="mqs-title"><i class="fa-solid fa-right-left"></i> Model Quick Switch</div>
-        <div class="flex1"></div>
-        <div id="mqsPanelMinimize" class="fa-fw fa-solid fa-window-minimize mqs-panel-action hoverglow" title="Minimize / restore"></div>
-        <div id="mqsPanelClose" class="fa-fw fa-solid fa-circle-xmark floating_panel_close hoverglow" title="Close"></div>
+<div id="mqsPanel" style="display: none;">
+    <div id="mqsPanelheader" class="mqs-titlebar">
+        <i class="fa-solid fa-right-left"></i>
+        <span class="mqs-title">Model Quick Switch</span>
+        <div class="mqs-titlebar-actions">
+            <div id="mqsPanelMinimize" class="menu_button" title="Minimize / restore"><i class="fa-solid fa-window-minimize"></i></div>
+            <div id="mqsPanelClose" class="menu_button" title="Close"><i class="fa-solid fa-circle-xmark"></i></div>
+        </div>
+        <div class="drag-grabber"></div>
     </div>
 
     <div id="mqsBody" class="mqs-body">

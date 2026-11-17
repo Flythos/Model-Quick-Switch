@@ -31,12 +31,51 @@
     resize: both;
 }
 
+/* --- titlebar --- */
+
+/* Custom in-flow titlebar: ST's global `body .panelControlBar` rule pins any
+   element carrying that class to the panel's top-right corner
+   (position: absolute; right: 5px; top: 5px), which pulls the header out of
+   the flex column and makes it float over the tab row. */
+#mqsPanel .mqs-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    /* Never compress when the panel is resized small. */
+    flex-shrink: 0;
+}
+
+/* ST's dragElement starts a drag only when the mousedown lands on
+   .drag-grabber inside #<panelId>header — stretch the grabber over the whole
+   titlebar so every spot except the action buttons drags the panel. ST's base
+   CSS hides .drag-grabber by default (display:none; MovingUI mode re-shows
+   it), so re-enable it here; keep it below the action buttons' z-index. */
 #mqsPanel .drag-grabber {
-    position: unset;
-    /* ST's base CSS hides .drag-grabber by default (display:none; MovingUI
-       mode re-shows it) — keep the grip visible so the panel can always be
-       dragged by it. */
-    display: inline-block;
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    cursor: move;
+    display: block;
+    z-index: 0;
+}
+
+#mqsPanel .mqs-titlebar-actions {
+    display: flex;
+    gap: 0.25rem;
+    /* Keep the buttons clickable above the grabber overlay. */
+    position: relative;
+    z-index: 1;
+}
+
+#mqsPanel .mqs-titlebar-actions .menu_button {
+    height: 22px;
+    width: 22px;
+    padding: 0;
+    font-size: 12px;
+    display: grid;
+    place-items: center;
 }
 
 #mqsPanel .mqs-title {
@@ -44,10 +83,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-#mqsPanel .mqs-panel-action {
-    cursor: pointer;
+    /* Push the action buttons to the right. */
+    flex: 1 1 auto;
 }
 
 #mqsPanel.mqs-minimized .mqs-body {
@@ -71,6 +108,8 @@
 
 .mqs-tab {
     flex: 1 1 50%;
+    /* Keep the icon and label on one line in narrow panels. */
+    white-space: nowrap;
 }
 
 .mqs-tab.mqs-active {
