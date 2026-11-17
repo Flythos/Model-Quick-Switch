@@ -13,7 +13,6 @@ export function defaultSettings() {
         remembered: [],
         ui: {
             open: false,
-            minimized: false,
             tab: 'remembered',
         },
     };
@@ -88,31 +87,6 @@ export function resolveControlId(mainApi, ccSource) {
 
 export function normalizeModelId(modelId) {
     return String(modelId ?? '').trim();
-}
-
-/**
- * Decides what the Available tab's Model ID field should hold.
- *
- * Returns the value to write into the field, or null to leave it untouched.
- * The live model is imported whenever it changed since the last import
- * (including the first fill), re-offered when the user emptied the field, and
- * a stale auto-fill is cleared — user-typed text is never wiped.
- *
- * @param {string} currentModel Model id currently set on the live connection.
- * @param {string} fieldValue   Current content of the Model ID field.
- * @param {string|null} lastImported What this helper last wrote into the field.
- * @returns {string|null}
- */
-export function nextAutoImport(currentModel, fieldValue, lastImported) {
-    const current = normalizeModelId(currentModel);
-    const field = normalizeModelId(fieldValue);
-    if (!current) {
-        return field && field === normalizeModelId(lastImported) ? '' : null;
-    }
-    if (current !== normalizeModelId(lastImported)) {
-        return current;
-    }
-    return field ? null : current;
 }
 
 /** Adds a model to the remembered list; dedupes per provider (case-insensitive). */

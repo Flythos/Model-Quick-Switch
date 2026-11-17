@@ -26,7 +26,6 @@ import {
     findRemembered,
     isChatCompletionApi,
     mergeSettings,
-    nextAutoImport,
     normalizeModelId,
     providerKeyOf,
     removeRemembered,
@@ -47,8 +46,6 @@ let settings = null;
 let panelElement = null;
 let buttonInjected = false;
 let injectionObserver = null;
-// What the Available tab last auto-filled into the Model ID field (nextAutoImport).
-let lastImportedModel = null;
 
 function log(message, ...rest) {
     console.debug(`[${MODULE_NAME}]`, message, ...rest);
@@ -182,7 +179,6 @@ async function buildPanel() {
     loadMovingUIState();
     dragElement(panelElement);
 
-    panelElement.toggleClass('mqs-minimized', Boolean(settings.ui.minimized));
     switchTab(settings.ui.tab, { save: false });
 }
 
@@ -256,12 +252,6 @@ function wirePanel() {
     const panel = panelElement;
 
     panel.find('#mqsPanelClose').on('click', hidePanel);
-
-    panel.find('#mqsPanelMinimize').on('click', function () {
-        const minimized = panel.toggleClass('mqs-minimized').hasClass('mqs-minimized');
-        settings.ui.minimized = minimized;
-        saveSettingsDebounced();
-    });
 
     panel.find('.mqs-tab').on('click', function () {
         switchTab(String($(this).data('tab')));
@@ -393,16 +383,6 @@ function refreshRememberedTab() {
     }
 }
 
-/** Keeps the Model ID field auto-imported with the live model (never clobbers user text). */
-function syncModelIdField(currentModel) {
-    const input = panelElement.find('#mqsModelId');
-    const next = nextAutoImport(currentModel, input.val(), lastImportedModel);
-    if (next !== null) {
-        input.val(next);
-        lastImportedModel = next || null;
-    }
-}
-
 function refreshAvailableTab() {
     const select = panelElement.find('#mqsModelSelect');
     const hint = panelElement.find('#mqsAvailableHint');
@@ -411,14 +391,11 @@ function refreshAvailableTab() {
     const control = resolveModelControl();
     if (!isChatCompletionApi(main_api) || !control) {
         select.append('<option value="">(not available for this API)</option>');
-        panelElement.find('#mqsModelId').val('');
-        lastImportedModel = null;
         hint.text('');
         return;
     }
 
     const currentModel = normalizeModelId(control.value);
-    syncModelIdField(currentModel);
 
     // Always offer the live model as a marked entry so the current selection
     // is visible even when the provider list hasn't loaded or lacks it.

@@ -87,10 +87,6 @@
     flex: 1 1 auto;
 }
 
-#mqsPanel.mqs-minimized .mqs-body {
-    display: none;
-}
-
 .mqs-body {
     display: flex;
     flex-direction: column;

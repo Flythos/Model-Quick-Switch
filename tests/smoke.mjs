@@ -9,7 +9,6 @@ import {
     findRemembered,
     isChatCompletionApi,
     mergeSettings,
-    nextAutoImport,
     normalizeModelId,
     providerKeyOf,
     removeRemembered,
@@ -36,17 +35,16 @@ function test(name, fn) {
 
 test('mergeSettings: undefined yields defaults', () => {
     const settings = mergeSettings(undefined);
-    assert.deepEqual(settings, { remembered: [], ui: { open: false, minimized: false, tab: 'remembered' } });
+    assert.deepEqual(settings, { remembered: [], ui: { open: false, tab: 'remembered' } });
 });
 
 test('mergeSettings: preserves stored entries + ui state', () => {
     const settings = mergeSettings({
         remembered: [{ id: 'e1', providerKey: 'openai:custom', modelId: 'gpt-x', label: '', addedAt: 1 }],
-        ui: { open: true, minimized: true, tab: 'available' },
+        ui: { open: true, tab: 'available' },
     });
     assert.equal(settings.remembered.length, 1);
     assert.equal(settings.ui.open, true);
-    assert.equal(settings.ui.minimized, true);
     assert.equal(settings.ui.tab, 'available');
 });
 
@@ -164,33 +162,6 @@ test('findRemembered matches case-insensitively, returns null otherwise', () => 
     assert.ok(findRemembered(settings, 'openai:custom', 'GPT-X'));
     assert.equal(findRemembered(settings, 'openai:custom', 'other'), null);
     assert.equal(findRemembered(settings, 'openai:openrouter', 'gpt-x'), null);
-});
-
-// --- model id auto-import ---
-
-test('nextAutoImport: first fill imports the live model', () => {
-    assert.equal(nextAutoImport('m1', '', null), 'm1');
-    assert.equal(nextAutoImport('  m1  ', '', null), 'm1');
-});
-
-test('nextAutoImport: leaves the field alone when nothing changed', () => {
-    assert.equal(nextAutoImport('m1', 'm1', 'm1'), null);
-    assert.equal(nextAutoImport('m1', 'user-typed', 'm1'), null);
-});
-
-test('nextAutoImport: imports over user text when the live model changed', () => {
-    assert.equal(nextAutoImport('m2', 'user-typed', 'm1'), 'm2');
-    assert.equal(nextAutoImport('m2', '', 'm1'), 'm2');
-});
-
-test('nextAutoImport: re-offers the live model after the user empties the field', () => {
-    assert.equal(nextAutoImport('m1', '', 'm1'), 'm1');
-});
-
-test('nextAutoImport: with no live model, clears only a stale auto-fill', () => {
-    assert.equal(nextAutoImport('', 'm1', 'm1'), '');
-    assert.equal(nextAutoImport('', 'user-typed', 'm1'), null);
-    assert.equal(nextAutoImport('', '', null), null);
 });
 
 // --- profile update ---
