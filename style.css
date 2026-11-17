@@ -21,16 +21,22 @@
     max-width: 90dvw;
     max-height: 90dvh;
     padding: 10px;
-    padding-top: 25px;
     border-radius: 10px;
     border: 1px solid var(--SmartThemeBorderColor);
     box-shadow: 0 0 10px var(--black70a);
     background-color: var(--SmartThemeBlurTintColor);
     overflow: hidden;
+    /* Native bottom-right resize handle (dragElement's moving-UI observer
+       records the size into movingUIState, which persists in MovingUI mode). */
+    resize: both;
 }
 
 #mqsPanel .drag-grabber {
     position: unset;
+    /* ST's base CSS hides .drag-grabber by default (display:none; MovingUI
+       mode re-shows it) — keep the grip visible so the panel can always be
+       dragged by it. */
+    display: inline-block;
 }
 
 #mqsPanel .mqs-title {
@@ -53,6 +59,9 @@
     flex-direction: column;
     gap: 0.5rem;
     overflow-y: auto;
+    /* Shrink with the panel (resize: both) and scroll instead of clipping. */
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 .mqs-tabs {
