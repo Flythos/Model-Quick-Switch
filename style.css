@@ -1,0 +1,177 @@
+/* Model Quick Switch — floating panel + lists.
+   Same shell pattern as the other panels appended to #movingDivs: ST's
+   dragElement drags it via the .drag-grabber and persists the position
+   through moving-UI state. */
+
+.mqs-hidden {
+    display: none !important;
+}
+
+#mqsPanel {
+    position: fixed;
+    display: none;
+    flex-direction: column;
+    z-index: 4000;
+    left: 0;
+    top: 0;
+    margin: 0;
+    width: 340px;
+    min-width: 240px;
+    min-height: 100px;
+    max-width: 90dvw;
+    max-height: 90dvh;
+    padding: 10px;
+    padding-top: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    box-shadow: 0 0 10px var(--black70a);
+    background-color: var(--SmartThemeBlurTintColor);
+    overflow: hidden;
+}
+
+#mqsPanel .drag-grabber {
+    position: unset;
+}
+
+#mqsPanel .mqs-title {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#mqsPanel .mqs-panel-action {
+    cursor: pointer;
+}
+
+#mqsPanel.mqs-minimized .mqs-body {
+    display: none;
+}
+
+.mqs-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow-y: auto;
+}
+
+.mqs-tabs {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.mqs-tab {
+    flex: 1 1 50%;
+}
+
+.mqs-tab.mqs-active {
+    border-color: var(--SmartThemeQuoteColor);
+    color: var(--SmartThemeQuoteColor);
+}
+
+.mqs-tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mqs-label {
+    margin: 0;
+    font-size: smaller;
+    opacity: 0.8;
+}
+
+.mqs-model-select {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.mqs-remember-button {
+    align-self: flex-start;
+}
+
+.mqs-remembered-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-height: 40dvh;
+    overflow-y: auto;
+}
+
+.mqs-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.mqs-row:hover {
+    background-color: var(--black30a);
+}
+
+.mqs-row.mqs-row-current {
+    border-color: var(--okGreen, #2e7d32);
+}
+
+.mqs-row .mqs-current-icon {
+    color: var(--okGreen, #2e7d32);
+}
+
+.mqs-row .mqs-star-icon {
+    opacity: 0.6;
+}
+
+.mqs-row-texts {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.mqs-row-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mqs-row-model {
+    font-size: smaller;
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mqs-remove {
+    cursor: pointer;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.mqs-remove:hover {
+    opacity: 1;
+}
+
+.mqs-hint {
+    font-size: smaller;
+    opacity: 0.75;
+}
+
+.mqs-notice {
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 8px;
+    padding: 0.5rem;
+    font-size: smaller;
+    background-color: var(--black30a);
+}
+
+.mqs-status {
+    font-size: smaller;
+    opacity: 0.8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

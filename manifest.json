@@ -1,0 +1,13 @@
+{
+    "display_name": "Model Quick Switch",
+    "loading_order": 100,
+    "requires": [],
+    "optional": [],
+    "dependencies": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "Biede",
+    "version": "0.1.0",
+    "homePage": "https://github.com/Flythos/Model-Quick-Switch",
+    "auto_update": true
+}

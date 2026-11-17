@@ -1,0 +1,41 @@
+<div id="mqsPanel" class="drawer-content" style="display: none;">
+    <div class="panelControlBar flex-container alignItemsBaseline">
+        <div id="mqsPanelheader" class="fa-fw fa-solid fa-grip drag-grabber hoverglow" title="Drag to move"></div>
+        <div class="mqs-title"><i class="fa-solid fa-right-left"></i> Model Quick Switch</div>
+        <div class="flex1"></div>
+        <div id="mqsPanelMinimize" class="fa-fw fa-solid fa-window-minimize mqs-panel-action hoverglow" title="Minimize / restore"></div>
+        <div id="mqsPanelClose" class="fa-fw fa-solid fa-circle-xmark floating_panel_close hoverglow" title="Close"></div>
+    </div>
+
+    <div id="mqsBody" class="mqs-body">
+        <div id="mqsNotice" class="mqs-notice mqs-hidden"></div>
+
+        <div id="mqsTabs" class="mqs-tabs">
+            <button id="mqs_tab_remembered" type="button" class="menu_button mqs-tab" data-tab="remembered" title="Remembered models for the current provider — click one to apply it">
+                <i class="fa-solid fa-star"></i> Remembered
+            </button>
+            <button id="mqs_tab_available" type="button" class="menu_button mqs-tab" data-tab="available" title="Pick from the provider's available models and remember them">
+                <i class="fa-solid fa-list"></i> Available
+            </button>
+        </div>
+
+        <div id="mqs_tab_remembered_content" class="mqs-tab-content">
+            <div id="mqsRememberedHint" class="mqs-hint"></div>
+            <div id="mqsRememberedList" class="mqs-remembered-list"></div>
+        </div>
+
+        <div id="mqs_tab_available_content" class="mqs-tab-content mqs-hidden">
+            <label class="mqs-label" for="mqsModelSelect">Available models</label>
+            <select id="mqsModelSelect" class="text_pole mqs-model-select"></select>
+            <label class="mqs-label" for="mqsModelId">Model ID</label>
+            <input id="mqsModelId" class="text_pole" type="text" placeholder="Pick above or type any model id" autocomplete="off" spellcheck="false" />
+            <button id="mqsRememberButton" type="button" class="menu_button mqs-remember-button" title="Add this model to the remembered list">
+                <i class="fa-solid fa-star"></i> Remember
+            </button>
+            <div id="mqsAvailableHint" class="mqs-hint"></div>
+        </div>
+
+        <hr class="sysHR" />
+        <div id="mqsStatus" class="mqs-status"></div>
+    </div>
+</div>
