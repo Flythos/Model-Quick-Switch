@@ -1,6 +1,6 @@
 {
     "name": "model-quick-switch",
-    "version": "0.1.2",
+    "version": "0.1.6",
     "private": true,
     "type": "module",
     "description": "SillyTavern UI extension: floating modal to remember models per chat-completion provider and one-click-apply them to the live connection and active connection profile.",

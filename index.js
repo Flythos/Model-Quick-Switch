@@ -46,6 +46,8 @@ let settings = null;
 let panelElement = null;
 let buttonInjected = false;
 let injectionObserver = null;
+let wandButtonInjected = false;
+let wandObserver = null;
 
 function log(message, ...rest) {
     console.debug(`[${MODULE_NAME}]`, message, ...rest);
@@ -510,6 +512,51 @@ function watchForProfilesRow() {
     injectionObserver.observe(target, { childList: true, subtree: true });
 }
 
+// --- Wand menu entry (extensions menu) — lets Toolbox re-home the switcher ---
+
+function injectWandButton() {
+    if (wandButtonInjected) {
+        return;
+    }
+    const menu = document.getElementById('extensionsMenu');
+    if (!menu) {
+        // Extensions menu not injected yet (load order) — wait for it.
+        watchForExtensionsMenu();
+        return;
+    }
+    if (document.getElementById('mqs_wand_item')) {
+        wandButtonInjected = true;
+        return;
+    }
+
+    const button = document.createElement('div');
+    button.id = 'mqs_wand_item';
+    button.className = 'list-item';
+    button.innerHTML = '<i class="fa-fw fa-solid fa-right-left"></i><span>Model Quick Switch</span>';
+    button.title = 'Model Quick Switch';
+    menu.appendChild(button);
+    $(button).on('click', togglePanel);
+
+    wandButtonInjected = true;
+    if (wandObserver) {
+        wandObserver.disconnect();
+        wandObserver = null;
+    }
+    log('wand menu entry injected');
+}
+
+function watchForExtensionsMenu() {
+    if (wandObserver) {
+        return;
+    }
+    wandObserver = new MutationObserver(function () {
+        if (document.getElementById('extensionsMenu')) {
+            injectWandButton();
+        }
+    });
+    wandObserver.observe(document.body, { childList: true, subtree: true });
+}
+
 // --- Events / init ---
 
 function registerEventListeners() {
@@ -525,6 +572,7 @@ async function init() {
     getSettings();
     await buildPanel();
     injectDrawerButton();
+    injectWandButton();
     registerEventListeners();
     if (settings.ui.open) {
         showPanel();

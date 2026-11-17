@@ -4,7 +4,7 @@ A SillyTavern extension that adds a small floating model switcher to the API con
 
 ## What it does
 
-A swap-arrows button appears next to the Connection Profiles dropdown in the API connections window (plug icon). It opens a floating panel with two tabs:
+A swap-arrows button appears next to the Connection Profiles dropdown in the API connections window (plug icon), and a "Model Quick Switch" entry is added to the wand menu (✨) — handy for re-homing it into the [Toolbox](https://github.com/Flythos/Toolbox). Both open the floating panel with two tabs:
 
 - **Remembered** — the models you saved for the current provider. Clicking one applies it to the live connection *and* writes it into the active connection profile. SillyTavern normally only stores the model when you press the profile's Update button; this extension updates the stored profile for you, touching only the model field (an "Exclude from profile" setting on the model field is honored).
 - **Available** — the provider's model list (the same one the connections window shows) plus a free-text Model ID field, so you can remember a model even before the list has loaded.
