@@ -11,7 +11,7 @@ A swap-arrows button appears next to the Connection Profiles dropdown in the API
 
 Behavior notes:
 
-- The panel can be dragged anywhere and minimized to its title bar; position and state survive page reloads. The currently active model is highlighted.
+- The panel can be dragged anywhere and minimized to its title bar; position and state survive page reloads. The model currently in use is always visible: it is highlighted in the Remembered tab (shown as a check-mark row even when not remembered), offered as the **★ Currently selected** first entry of the Available tab's dropdown, and auto-filled into the Model ID field whenever you open the panel or the live model changes.
 - Models are remembered **per provider** (e.g. your custom OpenAI-compatible endpoint, OpenRouter, Google), so you can never apply a model id that belongs to a different provider. Switching providers shows that provider's own list.
 - Works with all chat-completion sources that expose a model field (OpenAI, Claude, OpenRouter, Google, Mistral, DeepSeek, Groq, xAI, custom endpoints, …). Text-completion backends (koboldCpp, textgen, NovelAI, …) are not supported and show a notice instead.
 

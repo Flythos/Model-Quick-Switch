@@ -26,6 +26,7 @@ import {
     findRemembered,
     isChatCompletionApi,
     mergeSettings,
+    nextAutoImport,
     normalizeModelId,
     providerKeyOf,
     removeRemembered,
@@ -38,10 +39,16 @@ import {
 
 const PANEL_ID = 'mqsPanel';
 
+// data-id of the Remembered tab's "currently selected" info row (shown when
+// the live model is not among the remembered entries).
+const CURRENT_ROW_ID = '__mqs_current__';
+
 let settings = null;
 let panelElement = null;
 let buttonInjected = false;
 let injectionObserver = null;
+// What the Available tab last auto-filled into the Model ID field (nextAutoImport).
+let lastImportedModel = null;
 
 function log(message, ...rest) {
     console.debug(`[${MODULE_NAME}]`, message, ...rest);
@@ -297,6 +304,17 @@ function wirePanel() {
             return;
         }
         const entryId = String($(this).data('id'));
+        if (entryId === CURRENT_ROW_ID) {
+            // "Currently selected" info row — re-applies the live model.
+            const modelId = getCurrentModelId();
+            if (modelId) {
+                applyRemembered({ modelId, label: findOptionText(modelId) }).catch(error => {
+                    console.error(`[${MODULE_NAME}] apply failed`, error);
+                    toast('error', `Applying the model failed: ${error?.message ?? error}`);
+                });
+            }
+            return;
+        }
         const entry = settings.remembered.find(candidate => candidate.id === entryId);
         if (entry) {
             applyRemembered(entry).catch(error => {
@@ -360,6 +378,29 @@ function refreshRememberedTab() {
             </div>
         `));
     }
+
+    if (current && !findRemembered(settings, getCurrentProviderKey(), current)) {
+        // The live model is not remembered — still always show it as current.
+        list.prepend($(`
+            <div class="mqs-row mqs-row-current" data-id="${CURRENT_ROW_ID}" title="Re-apply ${escapeHtml(current)} (currently in use)">
+                <i class="fa-solid fa-circle-check mqs-current-icon"></i>
+                <div class="mqs-row-texts">
+                    <div class="mqs-row-label">${escapeHtml(current)}</div>
+                    <div class="mqs-row-model">Currently selected — not remembered yet</div>
+                </div>
+            </div>
+        `));
+    }
+}
+
+/** Keeps the Model ID field auto-imported with the live model (never clobbers user text). */
+function syncModelIdField(currentModel) {
+    const input = panelElement.find('#mqsModelId');
+    const next = nextAutoImport(currentModel, input.val(), lastImportedModel);
+    if (next !== null) {
+        input.val(next);
+        lastImportedModel = next || null;
+    }
 }
 
 function refreshAvailableTab() {
@@ -370,11 +411,20 @@ function refreshAvailableTab() {
     const control = resolveModelControl();
     if (!isChatCompletionApi(main_api) || !control) {
         select.append('<option value="">(not available for this API)</option>');
+        panelElement.find('#mqsModelId').val('');
+        lastImportedModel = null;
         hint.text('');
         return;
     }
 
     const currentModel = normalizeModelId(control.value);
+    syncModelIdField(currentModel);
+
+    // Always offer the live model as a marked entry so the current selection
+    // is visible even when the provider list hasn't loaded or lacks it.
+    if (currentModel) {
+        select.append(new Option(`★ Currently selected — ${currentModel}`, currentModel));
+    }
 
     if (control instanceof HTMLSelectElement) {
         // Mirror the provider's own dropdown, preserving its optgroups.
